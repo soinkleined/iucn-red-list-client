@@ -6,6 +6,18 @@ from unittest.mock import Mock, patch
 from iucn_red_list_client import IUCNRedListClient
 
 
+@pytest.fixture(autouse=True)
+def mock_env_vars(request, monkeypatch):
+    """Mock environment variables for unit tests only."""
+    # Skip mocking for integration tests
+    if 'integration' in request.keywords:
+        return
+    
+    # Remove IUCN_API_TOKEN if it exists to prevent interference with unit tests
+    monkeypatch.delenv('IUCN_API_TOKEN', raising=False)
+    monkeypatch.delenv('IUCN_BASE_URL', raising=False)
+
+
 @pytest.fixture
 def mock_api_token():
     """Mock API token for testing."""

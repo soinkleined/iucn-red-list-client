@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'examples'))
 from check_species_status import (
     parse_scientific_name,
     check_species_status,
-    get_status_description,
+    get_status_descriptions,
     is_threatened,
     read_input_file
 )
@@ -51,12 +51,21 @@ class TestSpeciesChecker:
         assert species == "alba"
 
     @pytest.mark.unit
-    def test_get_status_description(self):
-        """Test status code descriptions."""
-        assert get_status_description('EX') == 'Extinct'
-        assert get_status_description('EN') == 'Endangered'
-        assert get_status_description('LC') == 'Least Concern'
-        assert get_status_description('UNKNOWN') == 'UNKNOWN'
+    def test_get_status_descriptions(self):
+        """Test status code descriptions fetching."""
+        mock_client = Mock()
+        mock_client.call_endpoint.return_value = {
+            'red_list_categories': [
+                {'version': '3.1', 'code': 'EX', 'description': {'en': 'Extinct'}},
+                {'version': '3.1', 'code': 'EN', 'description': {'en': 'Endangered'}},
+                {'version': '3.1', 'code': 'LC', 'description': {'en': 'Least Concern'}},
+            ]
+        }
+        
+        descriptions = get_status_descriptions(mock_client)
+        assert descriptions['EX'] == 'Extinct'
+        assert descriptions['EN'] == 'Endangered'
+        assert descriptions['LC'] == 'Least Concern'
 
     @pytest.mark.unit
     def test_is_threatened(self):

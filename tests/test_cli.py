@@ -3,7 +3,7 @@
 import pytest
 import sys
 from unittest.mock import patch, Mock
-from iucn_red_list_client.api_client import main, create_argument_parser
+from iucn_red_list_client.cli import main, create_argument_parser
 
 
 class TestCLI:
@@ -63,7 +63,7 @@ class TestCLI:
 
     @pytest.mark.unit
     @patch('sys.argv', ['iucn-client', 'get_countries'])
-    @patch('iucn_red_list_client.api_client.IUCNRedListClient')
+    @patch('iucn_red_list_client.cli.IUCNRedListClient')
     def test_main_successful_call(self, mock_client_class, capsys):
         """Test main function with successful API call."""
         # Mock the client instance
@@ -77,7 +77,7 @@ class TestCLI:
 
     @pytest.mark.unit
     @patch('sys.argv', ['iucn-client', 'get_countries'])
-    @patch('iucn_red_list_client.api_client.IUCNRedListClient')
+    @patch('iucn_red_list_client.cli.IUCNRedListClient')
     def test_main_api_error(self, mock_client_class, capsys):
         """Test main function with API error."""
         # Mock the client to raise an exception
@@ -92,7 +92,7 @@ class TestCLI:
 
     @pytest.mark.unit
     @patch('sys.argv', ['iucn-client', 'get_countries_code', '-p', 'code=US'])
-    @patch('iucn_red_list_client.api_client.IUCNRedListClient')
+    @patch('iucn_red_list_client.cli.IUCNRedListClient')
     def test_main_with_parameters(self, mock_client_class, capsys):
         """Test main function with parameters."""
         mock_client = Mock()
@@ -106,7 +106,7 @@ class TestCLI:
 
     @pytest.mark.unit
     @patch('sys.argv', ['iucn-client', 'get_countries', '--log-level', 'DEBUG'])
-    @patch('iucn_red_list_client.api_client.IUCNRedListClient')
+    @patch('iucn_red_list_client.cli.IUCNRedListClient')
     def test_main_with_log_level(self, mock_client_class):
         """Test main function with custom log level."""
         mock_client = Mock()

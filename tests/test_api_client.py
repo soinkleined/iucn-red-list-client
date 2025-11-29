@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch, mock_open
 from pathlib import Path
 
 from iucn_red_list_client import IUCNRedListClient
-from iucn_red_list_client.api_client import show_endpoint_help
+from iucn_red_list_client.cli import show_endpoint_help
 
 
 class TestIUCNRedListClient:
@@ -76,7 +76,7 @@ class TestIUCNRedListClient:
             client_with_mock_config._make_request("GET", "/test/path")
 
     @pytest.mark.unit
-    @patch('iucn_red_list_client.api_client.IUCNRedListClient._make_request')
+    @patch('iucn_red_list_client.client.IUCNRedListClient._make_request')
     def test_call_endpoint_success(self, mock_make_request, client_with_mock_config, mock_response):
         """Test successful endpoint call."""
         mock_response.json.return_value = {"result": "success"}
@@ -94,7 +94,7 @@ class TestIUCNRedListClient:
             client_with_mock_config.call_endpoint('unknown_endpoint')
 
     @pytest.mark.unit
-    @patch('iucn_red_list_client.api_client.IUCNRedListClient._make_request')
+    @patch('iucn_red_list_client.client.IUCNRedListClient._make_request')
     def test_call_endpoint_with_path_params(self, mock_make_request, client_with_mock_config, mock_response):
         """Test endpoint call with path parameters."""
         mock_response.json.return_value = {"result": "success"}
@@ -112,7 +112,7 @@ class TestIUCNRedListClient:
             client_with_mock_config.call_endpoint('get_countries_code')
 
     @pytest.mark.unit
-    @patch('iucn_red_list_client.api_client.IUCNRedListClient._make_request')
+    @patch('iucn_red_list_client.client.IUCNRedListClient._make_request')
     def test_call_endpoint_with_query_params(self, mock_make_request, client_with_mock_config, mock_response):
         """Test endpoint call with query parameters."""
         mock_response.json.return_value = {"result": "success"}
