@@ -314,7 +314,8 @@ iucn-red-list-client/
 ├── iucn_red_list_client/              # Main package
 │   ├── __init__.py                    # Package initialization
 │   ├── __version__.py                 # Version information
-│   ├── api_client.py                  # Main client code
+│   ├── client.py                      # Main client code
+│   ├── cli.py                         # CLI interface
 │   └── api_endpoints.py               # Generated endpoint definitions
 ├── examples/                          # Example scripts and usage
 │   ├── README.md                      # Examples documentation

@@ -40,16 +40,16 @@ pytest --cov=iucn_red_list_client --cov-report=html
 ### Using the Test Runner
 ```bash
 # Run unit tests
-python run_tests.py unit
+python tests/run_tests.py unit
 
 # Run integration tests
-python run_tests.py integration
+python tests/run_tests.py integration
 
 # Run all tests
-python run_tests.py all
+python tests/run_tests.py all
 
 # Run with coverage report
-python run_tests.py coverage
+python tests/run_tests.py coverage
 ```
 
 ## Test Configuration
