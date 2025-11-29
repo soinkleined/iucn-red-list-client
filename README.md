@@ -193,7 +193,7 @@ The client supports all IUCN Red List API v4 endpoints organized by category:
 
 ### Comprehensive Groups
 - `get_comprehensive_groups` - List comprehensive groups
-- `get_comprehensive_groups_code` - Get assessments by comprehensive group
+- `get_comprehensive_groups_name` - Get assessments by comprehensive group name
 
 ### Conservation Actions
 - `get_conservation_actions` - List conservation actions
@@ -223,8 +223,9 @@ The client supports all IUCN Red List API v4 endpoints organized by category:
 - `get_taxa_scientific_name` - Get species by scientific name (genus_name + species_name)
 - `get_taxa_sis_sis_id` - Get species by SIS ID
 
-### Statistics
-- `get_statistics` - Get API statistics
+### Information
+- `get_information_api_version` - Get API version
+- `get_information_red_list_version` - Get Red List version
 
 And many more! Use `iucn-client --list-endpoints` to see all available endpoints.
 
