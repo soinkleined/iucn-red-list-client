@@ -330,6 +330,10 @@ iucn-red-list-client/
 ├── config/                            # Configuration templates
 │   ├── README.md                      # Configuration guide
 │   └── iucn_client.json.example       # Configuration template
+├── tests/                             # Test suite
+│   ├── README.md                      # Testing documentation
+│   ├── run_tests.py                   # Test runner script
+│   └── test_*.py                      # Test files
 └── tools/                             # Development tools
     ├── README.md                      # Tools documentation
     ├── generate_endpoints.py          # Endpoint generator
