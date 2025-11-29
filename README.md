@@ -289,7 +289,7 @@ for threat in threats.get('result', []):
 ```
 iucn-red-list-client/
 ├── README.md                           # Main documentation
-├── LICENSE                             # MIT license
+├── LICENSE                             # CC BY-NC 4.0 license
 ├── pyproject.toml                      # Package configuration
 ├── requirements.txt                    # Runtime dependencies
 ├── .gitignore                          # Git ignore patterns
@@ -377,7 +377,7 @@ iucn-client get_countries --log-level DEBUG
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) - see [LICENSE](LICENSE) file for details.
 
 ## Support
 
