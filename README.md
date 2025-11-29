@@ -1,5 +1,3 @@
-# IUCN Red List API Client
-
 <h1 align="center">IUCN Red List API Client</h1>
 <p align="center">A Python package and CLI for interacting with the IUCN Red List API v4.</p>
 
