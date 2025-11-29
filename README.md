@@ -319,7 +319,6 @@ iucn-red-list-client/
 ├── examples/                          # Example scripts and usage
 │   ├── README.md                      # Examples documentation
 │   ├── basic_usage.py                 # Basic API usage examples
-│   ├── conservation_analysis.py       # Advanced analysis examples
 │   ├── check_species_status.py        # Species conservation checker
 │   ├── sample_species.csv             # Sample input data
 │   ├── requirements-species-checker.txt # Additional dependencies

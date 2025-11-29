@@ -1,8 +1,0 @@
-row_number,scientific_name,red_list_category,status_description,is_threatened,year_published,assessment_id,url,possibly_extinct,possibly_extinct_in_wild,status,input_genus,input_species
-1,Quercus alba,LC,Least Concern,False,2015,2295268,https://www.iucnredlist.org/species/194051/2295268,False,False,found,Quercus,alba
-2,Sequoia sempervirens,EN,Endangered,True,2013,2841558,https://www.iucnredlist.org/species/34051/2841558,False,False,found,Sequoia,sempervirens
-3,Welwitschia mirabilis,Not Found,Not Found,False,N/A,N/A,N/A,False,False,not_found,Welwitschia,mirabilis
-4,Dionaea muscipula,VU,Vulnerable,True,2000,10253384,https://www.iucnredlist.org/species/39636/10253384,False,False,found,Dionaea,muscipula
-5,Pinus longaeva,LC,Least Concern,False,2011,9830878,https://www.iucnredlist.org/species/34024/9830878,False,False,found,Pinus,longaeva
-6,Acaena exigua,EX,Extinct,True,2016,101442020,https://www.iucnredlist.org/species/44072/101442020,False,False,found,Acaena,exigua
-7,Encephalartos woodii,EW,Extinct in the Wild,True,2022,243434007,https://www.iucnredlist.org/species/41881/243434007,False,False,found,Encephalartos,woodii

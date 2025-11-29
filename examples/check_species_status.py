@@ -57,9 +57,24 @@ def check_species_status(client: IUCNRedListClient, genus: str, species: str) ->
                 latest = response['assessments'][0]
             
             if latest:
+                # Get taxon info
+                taxon = response.get('taxon', {})
+                
+                # Get common name (first main common name if available)
+                common_name = 'N/A'
+                common_names = taxon.get('common_names', [])
+                for cn in common_names:
+                    if cn.get('main', False):
+                        common_name = cn.get('name', 'N/A')
+                        break
+                if common_name == 'N/A' and common_names:
+                    common_name = common_names[0].get('name', 'N/A')
+                
                 return {
                     'status': 'found',
-                    'scientific_name': response.get('taxon', {}).get('scientific_name', f"{genus} {species}"),
+                    'scientific_name': taxon.get('scientific_name', f"{genus} {species}"),
+                    'common_name': common_name,
+                    'family_name': taxon.get('family_name', 'N/A'),
                     'red_list_category': latest.get('red_list_category_code', 'Unknown'),
                     'year_published': latest.get('year_published', 'Unknown'),
                     'assessment_id': latest.get('assessment_id', 'Unknown'),
@@ -71,6 +86,8 @@ def check_species_status(client: IUCNRedListClient, genus: str, species: str) ->
         return {
             'status': 'not_found',
             'scientific_name': f"{genus} {species}",
+            'common_name': 'N/A',
+            'family_name': 'N/A',
             'red_list_category': 'Not Found',
             'year_published': 'N/A',
             'assessment_id': 'N/A',
@@ -83,6 +100,8 @@ def check_species_status(client: IUCNRedListClient, genus: str, species: str) ->
         return {
             'status': 'error',
             'scientific_name': f"{genus} {species}",
+            'common_name': 'N/A',
+            'family_name': 'N/A',
             'red_list_category': 'Error',
             'year_published': 'N/A',
             'assessment_id': 'N/A',
@@ -93,16 +112,20 @@ def check_species_status(client: IUCNRedListClient, genus: str, species: str) ->
         }
 
 
-def get_status_description(client: IUCNRedListClient, code: str) -> str:
-    """Get human-readable description for status codes from API."""
+def get_status_descriptions(client: IUCNRedListClient) -> Dict[str, str]:
+    """Fetch all status descriptions from API and return as dict."""
     try:
-        categories = client.call_endpoint('get_red_list_categories')
-        for category in categories.get('result', []):
-            if category.get('code') == code:
-                return category.get('title', code)
+        response = client.call_endpoint('get_red_list_categories')
+        descriptions = {}
+        # Get the latest version (3.1) descriptions
+        for cat in response.get('red_list_categories', []):
+            if cat.get('version') == '3.1':
+                code = cat.get('code')
+                desc = cat.get('description', {}).get('en', code)
+                descriptions[code] = desc
+        return descriptions
     except Exception:
-        pass
-    return code
+        return {}
 
 
 def is_threatened(code: str) -> bool:
@@ -123,16 +146,22 @@ def read_input_file(file_path: str) -> pd.DataFrame:
         raise ValueError(f"Unsupported file format: {path.suffix}")
 
 
-def process_species_list(input_file: str, output_file: Optional[str] = None) -> None:
+def process_species_list(input_file: str, output_file: Optional[str] = None, verbose: bool = False) -> None:
     """Process species list and check conservation status."""
     
     # Initialize IUCN client
     client = IUCNRedListClient()
     
+    # Fetch status descriptions from API once
+    if verbose:
+        print("Fetching conservation status descriptions from API...")
+    status_descriptions = get_status_descriptions(client)
+    
     # Read input file
     try:
         df = read_input_file(input_file)
-        print(f"Loaded {len(df)} species from {input_file}")
+        if verbose:
+            print(f"Loaded {len(df)} species from {input_file}")
     except Exception as e:
         print(f"Error reading input file: {e}")
         sys.exit(1)
@@ -159,7 +188,8 @@ def process_species_list(input_file: str, output_file: Optional[str] = None) -> 
     
     results = []
     
-    print("\nChecking species status...")
+    if verbose:
+        print("\nChecking species status...")
     for idx, row in df.iterrows():
         if species_col:
             scientific_name = str(row[species_col]).strip()
@@ -169,10 +199,12 @@ def process_species_list(input_file: str, output_file: Optional[str] = None) -> 
             species_name = str(row[species_name_col]).strip() if species_name_col else None
         
         if not genus or not species_name:
-            print(f"Row {idx + 1}: Skipping invalid species name")
+            if verbose:
+                print(f"Row {idx + 1}: Skipping invalid species name")
             continue
         
-        print(f"Checking {genus} {species_name}...")
+        if verbose:
+            print(f"Checking {genus} {species_name}...")
         result = check_species_status(client, genus, species_name)
         
         # Add original row data
@@ -187,68 +219,77 @@ def process_species_list(input_file: str, output_file: Optional[str] = None) -> 
     # Create results DataFrame
     results_df = pd.DataFrame(results)
     
-    # Add human-readable status
+    # Add human-readable status using cached descriptions
     results_df['status_description'] = results_df['red_list_category'].apply(
-        lambda code: get_status_description(client, code)
+        lambda code: status_descriptions.get(code, code)
     )
     results_df['is_threatened'] = results_df['red_list_category'].apply(is_threatened)
     
-    # Reorder columns
+    # Reorder columns - keep only essential output columns
     column_order = [
-        'row_number', 'scientific_name', 'red_list_category', 'status_description',
-        'is_threatened', 'year_published', 'assessment_id', 'url',
-        'possibly_extinct', 'possibly_extinct_in_wild', 'status'
+        'scientific_name', 'common_name', 'family_name', 'conservation_status', 
+        'is_threatened', 'year_published', 'assessment_id', 'url'
     ]
     
-    # Add any additional columns that exist
-    for col in results_df.columns:
-        if col not in column_order:
-            column_order.append(col)
+    # Rename status_description to conservation_status for clarity
+    results_df = results_df.rename(columns={'status_description': 'conservation_status'})
     
-    results_df = results_df[column_order]
+    # Select only the columns we want in output
+    output_columns = [col for col in column_order if col in results_df.columns]
+    results_df = results_df[output_columns]
     
-    # Print summary
-    print(f"\n=== SUMMARY ===")
-    print(f"Total species checked: {len(results_df)}")
-    print(f"Found in IUCN database: {len(results_df[results_df['status'] == 'found'])}")
-    print(f"Not found: {len(results_df[results_df['status'] == 'not_found'])}")
-    print(f"Errors: {len(results_df[results_df['status'] == 'error'])}")
+    # Print summary (only if verbose)
+    if verbose:
+        print(f"\n=== SUMMARY ===")
+        print(f"Total species checked: {len(results)}")
+        found_count = sum(1 for r in results if r['status'] == 'found')
+        not_found_count = sum(1 for r in results if r['status'] == 'not_found')
+        error_count = sum(1 for r in results if r['status'] == 'error')
+        print(f"Found in IUCN database: {found_count}")
+        print(f"Not found: {not_found_count}")
+        print(f"Errors: {error_count}")
+        
+        # Threatened species summary
+        threatened = results_df[results_df['is_threatened'] == True]
+        if len(threatened) > 0:
+            print(f"\n=== THREATENED SPECIES ({len(threatened)}) ===")
+            for _, row in threatened.iterrows():
+                status_desc = row['conservation_status']
+                year = row['year_published']
+                url = row['url']
+                print(f"• {row['scientific_name']}: {status_desc} ({year})")
+                if url != 'N/A':
+                    print(f"  Study: {url}")
     
-    # Threatened species summary
-    threatened = results_df[results_df['is_threatened'] == True]
-    if len(threatened) > 0:
-        print(f"\n=== THREATENED SPECIES ({len(threatened)}) ===")
-        for _, row in threatened.iterrows():
-            status_desc = row['status_description']
-            year = row['year_published']
-            url = row['url']
-            print(f"• {row['scientific_name']}: {status_desc} ({year})")
-            if url != 'N/A':
-                print(f"  Study: {url}")
-    
-    # Save results
+    # Save or display results
     if output_file:
         output_path = Path(output_file)
-        if output_path.suffix.lower() == '.csv':
+        ext = output_path.suffix.lower()
+        
+        if ext == '.csv':
             results_df.to_csv(output_file, index=False)
-        else:
+            print(f"Results saved to: {output_file}")
+        elif ext == '.tsv':
+            results_df.to_csv(output_file, index=False, sep='\t')
+            print(f"Results saved to: {output_file}")
+        elif ext in ['.xlsx', '.xls']:
             results_df.to_excel(output_file, index=False)
-        print(f"\nResults saved to: {output_file}")
+            print(f"Results saved to: {output_file}")
+        else:
+            # Default to CSV if unknown extension
+            results_df.to_csv(output_file, index=False)
+            print(f"Results saved to: {output_file}")
     else:
-        # Default output filename
-        input_path = Path(input_file)
-        output_file = f"{input_path.stem}_conservation_status{input_path.suffix}"
-        if input_path.suffix.lower() == '.csv':
-            results_df.to_csv(output_file, index=False)
-        else:
-            results_df.to_excel(output_file, index=False)
-        print(f"\nResults saved to: {output_file}")
+        # Display as table
+        if verbose:
+            print("\n=== RESULTS TABLE ===")
+        print(results_df.to_string(index=False))
 
 
 def main():
     """Main function."""
     parser = argparse.ArgumentParser(
-        description='Check conservation status of plant species using IUCN Red List API'
+        description='Check conservation status of species using IUCN Red List API'
     )
     parser.add_argument(
         'input_file',
@@ -256,7 +297,12 @@ def main():
     )
     parser.add_argument(
         '-o', '--output',
-        help='Output file path (default: input_filename_conservation_status.ext)'
+        help='Output file path (.csv, .tsv, .xlsx). If not specified, displays table to console.'
+    )
+    parser.add_argument(
+        '-v', '--verbose',
+        action='store_true',
+        help='Show detailed progress messages'
     )
     
     args = parser.parse_args()
@@ -266,7 +312,7 @@ def main():
         sys.exit(1)
     
     try:
-        process_species_list(args.input_file, args.output)
+        process_species_list(args.input_file, args.output, args.verbose)
     except KeyboardInterrupt:
         print("\nOperation cancelled by user.")
         sys.exit(1)

@@ -44,21 +44,7 @@ Demonstrates fundamental operations:
 python examples/basic_usage.py
 ```
 
-### 2. Conservation Analysis (`conservation_analysis.py`)
-
-Advanced conservation research examples:
-- Analyzing endangered species by threat level
-- Species distribution by habitat type (dynamically fetched from API)
-- Population trend analysis
-- Comprehensive threat assessment
-
-All data is fetched dynamically from the API with no hardcoded values.
-
-```bash
-python examples/conservation_analysis.py
-```
-
-### 3. Species Conservation Status Checker (`check_species_status.py`)
+### 2. Species Conservation Status Checker (`check_species_status.py`)
 
 Batch processing script for checking conservation status of multiple species:
 - Reads CSV or Excel files with species names
@@ -66,12 +52,32 @@ Batch processing script for checking conservation status of multiple species:
 - Identifies threatened species (Extinct, Endangered, Vulnerable)
 - Generates detailed conservation reports with study citations
 - Fetches Red List category descriptions dynamically from API
+- Supports multiple output formats: table (console), CSV, TSV, Excel
+- Clean output by default; use `--verbose` for progress messages and summaries
 
 All status descriptions and categories are retrieved from the API in real-time.
 
 **Additional requirements:**
 ```bash
 pip install -r requirements-species-checker.txt
+```
+
+**Usage:**
+```bash
+# Display as table (clean output)
+python examples/check_species_status.py examples/sample_species.csv
+
+# Display with progress and summary (verbose)
+python examples/check_species_status.py examples/sample_species.csv --verbose
+
+# Save as CSV
+python examples/check_species_status.py examples/sample_species.csv -o results.csv
+
+# Save as TSV
+python examples/check_species_status.py examples/sample_species.csv -o results.tsv
+
+# Save as Excel with verbose output
+python examples/check_species_status.py examples/sample_species.csv -o results.xlsx -v
 ```
 
 **Usage:**
@@ -99,11 +105,6 @@ Sequoia sempervirens,Coast Redwood,California
 - Assessment year and study ID
 - Direct links to IUCN Red List studies
 - Threat level indicators
-- Comprehensive threat assessment
-
-```bash
-python examples/conservation_analysis.py
-```
 
 ## CLI Examples
 
