@@ -1,6 +1,6 @@
 # Species Conservation Status Checker
 
-This script uses the IUCN Red List API client to check the conservation status of plant species from a CSV or Excel file.
+This script uses the IUCN Red List API client to check the conservation status of species from a CSV or Excel file. All conservation status descriptions and categories are fetched dynamically from the IUCN API in real-time.
 
 ## Installation
 
@@ -52,13 +52,15 @@ Sequoia,sempervirens,Coast Redwood
 
 The script generates a detailed report including:
 
-- **Conservation Status**: IUCN Red List category (EX, CR, EN, VU, NT, LC, etc.)
-- **Status Description**: Human-readable status (Extinct, Critically Endangered, etc.)
+- **Conservation Status**: IUCN Red List category code (EX, CR, EN, VU, NT, LC, etc.)
+- **Status Description**: Human-readable status fetched from API (Extinct, Critically Endangered, etc.)
 - **Threat Level**: Boolean indicating if species is threatened
 - **Assessment Year**: Year the assessment was published
 - **Assessment ID**: Unique identifier for the study
 - **Study URL**: Link to the full assessment on IUCN Red List website
 - **Extinction Flags**: Possibly extinct or possibly extinct in wild indicators
+
+All status descriptions are retrieved dynamically from the IUCN Red List API to ensure accuracy.
 
 ### Example Output
 

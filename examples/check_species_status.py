@@ -93,21 +93,16 @@ def check_species_status(client: IUCNRedListClient, genus: str, species: str) ->
         }
 
 
-def get_status_description(code: str) -> str:
-    """Get human-readable description for status codes."""
-    descriptions = {
-        'EX': 'Extinct',
-        'EW': 'Extinct in the Wild',
-        'CR': 'Critically Endangered',
-        'EN': 'Endangered',
-        'VU': 'Vulnerable',
-        'NT': 'Near Threatened',
-        'LC': 'Least Concern',
-        'DD': 'Data Deficient',
-        'NE': 'Not Evaluated',
-        'NA': 'Not Applicable'
-    }
-    return descriptions.get(code, code)
+def get_status_description(client: IUCNRedListClient, code: str) -> str:
+    """Get human-readable description for status codes from API."""
+    try:
+        categories = client.call_endpoint('get_red_list_categories')
+        for category in categories.get('result', []):
+            if category.get('code') == code:
+                return category.get('title', code)
+    except Exception:
+        pass
+    return code
 
 
 def is_threatened(code: str) -> bool:
@@ -193,7 +188,9 @@ def process_species_list(input_file: str, output_file: Optional[str] = None) -> 
     results_df = pd.DataFrame(results)
     
     # Add human-readable status
-    results_df['status_description'] = results_df['red_list_category'].apply(get_status_description)
+    results_df['status_description'] = results_df['red_list_category'].apply(
+        lambda code: get_status_description(client, code)
+    )
     results_df['is_threatened'] = results_df['red_list_category'].apply(is_threatened)
     
     # Reorder columns

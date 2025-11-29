@@ -48,9 +48,11 @@ python examples/basic_usage.py
 
 Advanced conservation research examples:
 - Analyzing endangered species by threat level
-- Species distribution by habitat type
+- Species distribution by habitat type (dynamically fetched from API)
 - Population trend analysis
 - Comprehensive threat assessment
+
+All data is fetched dynamically from the API with no hardcoded values.
 
 ```bash
 python examples/conservation_analysis.py
@@ -59,10 +61,13 @@ python examples/conservation_analysis.py
 ### 3. Species Conservation Status Checker (`check_species_status.py`)
 
 Batch processing script for checking conservation status of multiple species:
-- Reads CSV or Excel files with plant species names
+- Reads CSV or Excel files with species names
 - Queries IUCN Red List API for each species
 - Identifies threatened species (Extinct, Endangered, Vulnerable)
 - Generates detailed conservation reports with study citations
+- Fetches Red List category descriptions dynamically from API
+
+All status descriptions and categories are retrieved from the API in real-time.
 
 **Additional requirements:**
 ```bash

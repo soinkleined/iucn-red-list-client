@@ -41,21 +41,18 @@ def analyze_by_habitat(client):
     try:
         # Get list of habitats
         habitats = client.call_endpoint('get_habitats')
-        print(f"Total habitat types available: {len(habitats.get('result', []))}")
+        habitat_list = habitats.get('result', [])
+        print(f"Total habitat types available: {len(habitat_list)}")
         
-        # Analyze a few key habitats
-        key_habitats = [
-            ('1_1', 'Forest - Boreal'),
-            ('5_1', 'Wetlands - Permanent Rivers/Streams/Creeks'),
-            ('9_1', 'Marine Neritic - Pelagic'),
-        ]
-        
-        for code, name in key_habitats:
+        # Analyze first few habitats as examples
+        for habitat in habitat_list[:3]:
+            code = habitat.get('code')
+            title = habitat.get('title', 'Unknown')
             try:
                 species = client.call_endpoint('get_habitats_code', code=code)
-                print(f"Species in {name}: {len(species.get('assessments', []))}")
+                print(f"Species in {title}: {len(species.get('assessments', []))}")
             except Exception as e:
-                print(f"Error getting species for habitat {name}: {e}")
+                print(f"Error getting species for habitat {title}: {e}")
                 
     except Exception as e:
         print(f"Error in habitat analysis: {e}")
