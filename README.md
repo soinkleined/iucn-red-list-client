@@ -21,8 +21,11 @@ This repository provides a comprehensive Python package and command-line tool fo
 ## Quick Start
 
 ```bash
-# Install from source
-git clone <repository-url>
+# Install directly from GitHub
+pip install git+https://github.com/soinkleined/iucn-red-list-client.git
+
+# Or install from source
+git clone https://github.com/soinkleined/iucn-red-list-client.git
 cd iucn-red-list-client
 pip install .
 
@@ -45,10 +48,16 @@ iucn-client --list-endpoints
 
 ## Installation
 
+### From GitHub (Recommended)
+
+```bash
+pip install git+https://github.com/soinkleined/iucn-red-list-client.git
+```
+
 ### From Source
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/soinkleined/iucn-red-list-client.git
 cd iucn-red-list-client
 pip install .
 ```
@@ -56,7 +65,7 @@ pip install .
 ### Development Installation
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/soinkleined/iucn-red-list-client.git
 cd iucn-red-list-client
 pip install -e .
 ```

@@ -2,11 +2,17 @@
 
 ## Quick Installation
 
-### From Source (Recommended)
+### From GitHub (Recommended)
+
+```bash
+pip install git+https://github.com/soinkleined/iucn-red-list-client.git
+```
+
+### From Source
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/soinkleined/iucn-red-list-client.git
 cd iucn-red-list-client
 
 # Install the package
@@ -84,7 +90,7 @@ For development work:
 
 ```bash
 # Clone repository
-git clone <repository-url>
+git clone https://github.com/soinkleined/iucn-red-list-client.git
 cd iucn-red-list-client
 
 # Install development dependencies
