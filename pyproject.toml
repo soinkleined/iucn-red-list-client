@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iucn_red_list_client"
+version = "1.0.0"
+description = "A Python package for accessing the IUCN Red List API v4 with pagination and data payload support"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "David Klein", email = "david@soinkleined.com"}
+]
+maintainers = [
+    {name = "David Klein", email = "david@soinkleined.com"}
+]
+keywords = ["iucn", "red-list", "api", "client", "rest", "conservation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "requests>=2.25.1",
+    "truststore>=0.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "PyYAML>=6.0",
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=22.0.0",
+    "flake8>=5.0.0",
+    "mypy>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/iucn-red-list-client"
+Repository = "https://github.com/your-org/iucn-red-list-client"
+Documentation = "https://github.com/your-org/iucn-red-list-client"
+
+[project.scripts]
+iucn-client = "iucn_red_list_client.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["iucn_red_list_client*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.md"]
