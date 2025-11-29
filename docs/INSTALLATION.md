@@ -41,7 +41,7 @@ iucn-client --list-endpoints
 
 ```bash
 export IUCN_API_TOKEN="your_api_token_here"
-export IUCN_BASE_URL="https://apiv3.iucnredlist.org"  # Optional
+export IUCN_BASE_URL="https://api.iucnredlist.org"  # Optional
 ```
 
 ### Method 2: Configuration File
@@ -50,7 +50,7 @@ Create `~/.iucn_client.json`:
 ```json
 {
     "api_token": "your_api_token_here",
-    "base_url": "https://apiv3.iucnredlist.org"
+    "base_url": "https://api.iucnredlist.org"
 }
 ```
 
@@ -67,10 +67,18 @@ iucn-client --config my_config.json get_countries
 
 ## Getting an API Token
 
-1. Visit [IUCN Red List API](https://apiv3.iucnredlist.org/api/v3/docs)
+1. Visit [IUCN Red List API](https://api.iucnredlist.org/)
 2. Register for an account
 3. Generate an API token
 4. Use the token in your configuration
+
+For API documentation, see the [Swagger documentation](https://api.iucnredlist.org/api-docs/index.html).
+
+### Citation Requirement
+
+When using this API, you must cite:
+
+**IUCN 2025. IUCN Red List of Threatened Species. Version 2025-2 <www.iucnredlist.org>**
 
 ## Requirements
 

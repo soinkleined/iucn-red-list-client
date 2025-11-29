@@ -104,10 +104,18 @@ See `config/iucn_client.json.example` for a template.
 
 To use the IUCN Red List API, you need to obtain an API token:
 
-1. Visit the [IUCN Red List API website](https://api.iucnredlist.org/api/v4/docs)
+1. Visit the [IUCN Red List API website](https://api.iucnredlist.org/)
 2. Register for an account
 3. Generate an API token
 4. Set the token in your environment variables or configuration file
+
+For API documentation, see the [Swagger documentation](https://api.iucnredlist.org/api-docs/index.html).
+
+### Citation Requirement
+
+When using this API, you must cite:
+
+**IUCN 2025. IUCN Red List of Threatened Species. Version 2025-2 <www.iucnredlist.org>**
 
 ## Usage
 
@@ -391,7 +399,7 @@ Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) - se
 ## Support
 
 For issues and questions:
-- Check the [IUCN Red List API documentation](https://api.iucnredlist.org/api/v4/docs)
+- Check the [IUCN Red List API documentation](https://api.iucnredlist.org/api-docs/index.html)
 - Review the troubleshooting section above
 - Submit issues to the repository issue tracker
 
